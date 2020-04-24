@@ -36,8 +36,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - type: volume
-        source: letsencrypt
+      - type: bind
+        source: ${LETS_ENCRYPT_STORAGE_PATH} # Place it on a Gluster replicated volume
         target: /letsencrypt
       - type: bind
         source: /var/run/docker.sock
@@ -54,7 +54,4 @@ services:
       - traefik.http.routers.https.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.https.entrypoints=https
       - traefik.http.routers.https.tls=true
-      #- traefik.http.routers.https.tls.certresolver=letsencrypt
-
-volumes:
-  letsencrypt:
+      - traefik.http.routers.https.tls.certresolver=letsencrypt
